@@ -1,0 +1,197 @@
+body {
+	height: 100vh;
+	margin: 0;
+	//display: grid;
+	place-content: center;
+	grid-auto-flow: column;
+	gap: 40px;
+	background: linear-gradient(180deg, #101013, #080809);
+	-webkit-animation: fadein .5s linear;
+}
+
+.links {
+	display: grid;
+	place-content: center;
+	grid-auto-flow:row dense;
+	align: center;
+	-moz-user-select: none;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.DwnPicker {
+	background: #26262b;
+	border-radius: 50px;
+	color: #C8C8C8;
+	text-decoration: none;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 3vw;
+	margin: 1vw;
+	padding: 15px;
+	text-align: center;
+	transition: color .4s ease-in-out, background .4s ease-in-out, box-shadow .4s ease-in-out;
+}
+
+.DwnPicker:hover {
+	box-shadow: 
+		0 0 10px #0AD600,
+		0 0 15px #0AD600,
+        0 0 25px #0AD600;
+    background: #0AD600;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.DwnPicker:active {
+	box-shadow: 
+		0 0 10px #068200,
+		0 0 15px #068200,
+        0 0 25px #068200;
+    background: #068200;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.SrcPicker {
+	background: #26262b;
+	border-radius: 50px;
+	color: #C8C8C8;
+	text-decoration: none;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 3vw;
+	margin: 1vw;
+	padding: 15px;
+	text-align: center;
+	transition: color .4s ease-in-out, background .4s ease-in-out, box-shadow .4s ease-in-out;
+}
+
+.SrcPicker:hover {
+	box-shadow: 
+		0 0 10px #0AD600,
+		0 0 15px #0AD600,
+        0 0 25px #0AD600;
+    background: #0AD600;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.SrcPicker:active {
+	box-shadow: 
+		0 0 10px #068200,
+		0 0 15px #068200,
+        0 0 25px #068200;
+    background: #068200;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.DsButton {
+	background: #26262b;
+	border-radius: 50px;
+	color: #C8C8C8;
+	text-decoration: none;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 3vw;
+	margin: 1vw;
+	padding: 15px;
+	text-align: center;
+	transition: color .4s ease-in-out, background .4s ease-in-out, box-shadow .4s ease-in-out;
+}
+
+.DsButton:hover {
+	box-shadow: 
+		0 0 10px #0AD600,
+		0 0 15px #0AD600,
+        0 0 25px #0AD600;
+    background: #0AD600;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.DsButton:active {
+	box-shadow: 
+		0 0 10px #068200,
+		0 0 15px #068200,
+        0 0 25px #068200;
+    background: #068200;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.GtButton {
+	background: #26262b;
+	border-radius: 50px;
+	color: #C8C8C8;
+	text-decoration: none;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 3vw;
+	margin: 1vw;
+	padding: 15px;
+	text-align: center;
+	transition: color .4s ease-in-out, background .4s ease-in-out, box-shadow .4s ease-in-out;
+}
+
+.GtButton:hover {
+	box-shadow: 
+		0 0 10px #0AD600,
+		0 0 15px #0AD600,
+        0 0 25px #0AD600;
+    background: #0AD600;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.GtButton:active {
+	box-shadow: 
+		0 0 10px #068200,
+		0 0 15px #068200,
+        0 0 25px #068200;
+    background: #068200;
+	color: #000;
+	transition: color .1s ease-in-out, background .1s ease-in-out, box-shadow .1s ease-in-out;
+}
+
+.maintitle {
+	display: grid;
+	font-size: 2vw;
+	place-content: center;
+	text-shadow: 
+		0 0 20px #FFF,
+		0 0 30px #FFF,
+        0 0 50px #FFF;
+	font-family: 'Ubuntu', sans-serif;
+	-moz-user-select: none;
+	color: fff;
+	-webkit-transform: translateY(0px);
+	-webkit-animation: textmove 6s ease-in-out infinite, textrainbow 25s linear infinite;
+}
+
+
+
+@keyframes fadein {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+@keyframes textmove {
+	0% {-webkit-transform: translateY(0px);}
+	50% {-webkit-transform: translateY(-25px);}
+	100% {-webkit-transform: translateY(0px);}
+}
+
+@keyframes textrainbow {
+	0% {text-shadow: 0 0 5px red; color: red;}
+	12,5% {text-shadow: 0 0 5px orange; color: orange;}
+	25% {text-shadow: 0 0 5px yellow; color: yellow;}
+	37,5% {text-shadow: 0 0 5px green; color: green;}
+	50% {text-shadow: 0 0 5px cyan; color: cyan;}
+	62,5% {text-shadow: 0 0 5px blue; color: blue;}
+	75% {text-shadow: 0 0 5px purple; color: purple;}
+	87,5% {text-shadow: 0 0 5px deeppink; color: deeppink;}
+	100% {text-shadow: 0 0 5px red; color: red;}
+	
+}
+
