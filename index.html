@@ -1,47 +1,545 @@
-<!DOCTYPE HTML5>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Beerymaid | Picker Hub</title>
-		<link rel="icon" sizes="500x500" href="./favicon.png">
-		<link rel="stylesheet" href="css/styles.css">
-		<script type="text/javascript" src="index.js"></script>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
-	</head>
-	<body>
-	<svg width="0" height="0">
-		<filter id="ca">
-			<feColorMatrix type="matrix" 
-			result="red_"             
-			values="4 0 0 0 0
-					0 0 0 0 0 
-					0 0 0 0 0 
-					0 0 0 1 0"/>
-			<feOffset in="red_" dx="1.5" dy="1" result="red"/>
-			<feColorMatrix type="matrix" 
-			in="SourceGraphic"             
-			result="blue_"             
-			values="0 0 0 0 0
-					0 3 0 0 0 
-					0 0 10 0 0 
-					0 0 0 1 0"/>
-			<feOffset in="blue_" dx="-1.5" dy="-1" result="blue"/>    
-			<feBlend mode="screen" in="red" in2="blue"/>
-		
-		</filter>
-	</svg>
-	<div class="filmgrain"></div>
-	<header class="maintitle">
-		<h1>Beerymaid | Picker Hub</h1>
-	</header>
-	<div class="links">
-		</img><a href="https://kutt.it/DYiyKI" class="DwnPicker">Download Picker</a>
-		<a href="https://kutt.it/qp3IEk" class="SrcPicker">Picker Sources</a>
-		<a href="https://discord.com/users/327424787464847360" class="DsButton">Discord</a>
-		<a href="https://github.com/ShyKiss" class="GtButton">Github</a>
-	</div>
-	<img id="shufflee" width="100" height="100" src="pause_shuffle.svg" onClick="togglePlay()"></img>
-	</body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beerymaid</title>
+  <style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-image: url('res/bg.png');
+    color: #33ff33;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+	width: 100vw;
+    text-align: center;
+  }
+
+  .vhs-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    mix-blend-mode: screen;
+    opacity: 0.15;
+  }
+
+  .scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.45) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 11;
+  }
+
+  .header {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-top: 200px;
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #00ff00;
+    color: #33ff33;
+    position: relative;
+    z-index: 2;
+    transform: scaleY(0.98);
+    transform-origin: center;
+  }
+  
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 100% 4px;
+    opacity: 0.3;
+    animation: scan-drift 2s linear infinite, line-jump 4s ease-in-out infinite;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  @keyframes scan-drift {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+  }
+
+  @keyframes line-jump {
+    0%, 95%, 100% { transform: translateY(0); }
+    3% { transform: translateY(-6px); }
+    6% { transform: translateY(4px); }
+  }
+  
+  .cursor {
+    opacity: 1;
+    font-weight: normal;
+    animation: blink 1.2s step-start infinite;
+    color: #33ff33;
+    text-shadow: 0 0 5px #33ff33, 0 0 10px #33ff33;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .links-container {
+    position: relative;
+    margin-top: 20px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 12;
+    transform-style: preserve-3d;
+    perspective: 1200px;
+    padding: 60px 25px 25px 25px;
+    background: rgba(0, 0, 0, 1);
+    border: 1px solid rgba(51, 255, 51, 0.4);
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.15);
+    border-radius: 0;
+    width: 300px;
+    transition: transform 0.1s ease-out, box-shadow 0.2s ease;
+  }
+
+  .link {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+	font-weight: bold;
+	letter-spacing: 3px;
+    color: #33ff33;
+    text-decoration: none;
+    border: 1px solid #33ff33;
+    width: 250px;
+    border-radius: 0;
+    background: transparent;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+
+  .link:hover {
+    background-color: rgba(51, 255, 51, 0.1);
+    text-shadow: 0 0 15px #33ff33;
+    box-shadow: 0 0 15px #33ff33;
+  }
+
+  .link:hover:before {
+    left: 100%;
+  }
+
+  .eyes-overlay {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  
+  .eye {
+    width: 25px;
+    height: 17px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #33ff33;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 6px rgba(51, 255, 51, 0.3);
+  }
+  
+  .pupil {
+    width: 12px;
+    height: 12px;
+    background: #ff3333;
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    transform: translate(0%, 0%);
+    transition: transform 0.05s cubic-bezier(0.3, 0, 0.2, 1);
+    box-shadow: 0 0 2px #ff0;
+  }
+  
+  .left-eye {
+    transform: rotate(5deg);
+  }
+  
+  .right-eye {
+    transform: rotate(-5deg);
+  }
+  
+  .eye.blink {
+    animation: blink-animation 0.15s ease-in-out;
+  }
+  
+  @keyframes blink-animation {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.1); }
+  }
+    
+  .tape-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .tape-strip {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('res/filmloop.png') repeat-x;
+    background-size: auto 100%;
+    animation: tape-scroll 10s linear infinite;
+    transform: translate3d(0, 0, 0);
+    will-change: background-position;
+  }
+  
+  @keyframes tape-scroll {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 1888px 0;
+    }
+  }
+  
+  .tape-container-negative {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .tape-strip-negative {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('res/filmloop.png') repeat-x;
+	background-transparent: 20%;
+    background-size: auto 100%;
+    animation: tape-scroll-negative 10s linear infinite;
+    transform: translate3d(0, 0, 0);
+    will-change: background-position;
+  }
+  
+  @keyframes tape-scroll-negative {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -1888px 0;
+    }
+  }
+  
+  </style>
+</head>
+<body>
+
+  <div class="vhs-container" id="vhs-effect"></div>
+  <div class="scanline"></div>
+  <!div class="noise"></div>
+  <!div class="flicker"></div>
+  
+  <div class="tape-container">
+    <div class="tape-strip"></div>
+  </div>
+  
+  <div class="tape-container-negative">
+    <div class="tape-strip-negative"></div>
+  </div>
+
+  <h1 class="header">
+  Beerymaid<span class="cursor">_</span>
+ </h1>
+
+  <div class="links-container">
+  <div class="eyes-overlay">
+    <div class="eye left-eye">
+      <div class="pupil"></div>
+    </div>
+    <div class="eye right-eye">
+      <div class="pupil"></div>
+    </div>
+  </div>
+  
+    <a href="?utm_source=picker" class="link">PICKER</a>
+    <a href="?utm_source=total" class="link">TOTAL</a>
+    <a href="?utm_source=discord" class="link">DISCORD</a>
+    <a href="?utm_source=github" class="link">GITHUB</a>
+  </div>
+
+  <script>
+  (function() {
+    const queryString = window.location.search;
+    if (!queryString) return;
+    const urlParams = new URLSearchParams(queryString);
+    const utmSource = urlParams.get('utm_source');
+
+    if (utmSource === 'discord') {
+      window.location.href = 'https://discord.com/users/327424787464847360';
+    }
+    else if (utmSource === 'github') {
+      window.location.href = 'https://github.com/ShyKiss';
+    }
+    else if (utmSource === 'total') {
+      window.location.href = 'https://t.me/beery4ka';
+    }
+    else if (utmSource === 'picker') {
+      window.location.href = 'https://mega.nz/folder/fXIFDYjI#UB-9dfV6099oSRWeSU9FRg';
+    }
+  })();
+  
+  const header = document.querySelector('.header');
+
+  function interpolateColor(t) {
+    const r = Math.round(51 + t * (255 - 51));
+    const g = Math.round(255 - t * 255);
+    return `rgb(${r}, ${g}, 33)`;
+  }
+
+  function updateStyle(intensity, dx, dy, scaleY = 0.98) {
+    const color = interpolateColor(intensity);
+    const blur = 10 + intensity * 12;
+    header.style.color = color;
+    header.style.textShadow = `
+      ${dx}px ${dy}px ${blur * 0.6}px rgba(255, 255, 255, 0.3),
+      0 0 ${blur}px ${color}
+    `;
+    header.style.transform = `translate(${dx}px, ${dy}px) scaleY(${scaleY})`;
+  }
+
+  function startBaseDrift() {
+    setInterval(() => {
+      if (!header.isOverheating) {
+        const dx = (Math.random() - 0.5) * 0.7;
+        const dy = (Math.random() - 0.5) * 0.4;
+        const scaleY = 0.97 + Math.random() * 0.03;
+        updateStyle(0, dx, dy, scaleY);
+      }
+    }, 100);
+  }
+
+  function overheatEffect() {
+    header.isOverheating = true;
+    const rampUp = 1800;
+    const peak = 1000;
+    const crashTime = rampUp + peak;
+    const startTime = performance.now();
+
+    function animate(currentTime) {
+      const elapsed = currentTime - startTime;
+      if (elapsed >= crashTime) {
+        header.style.transform = 'translate(0) scaleY(0.98)';
+        header.style.color = '#33ff33';
+        header.style.textShadow = '0 0 10px #33ff33, 0 0 20px #00ff00';
+        header.isOverheating = false;
+        header.style.opacity = '0.7';
+        setTimeout(() => header.style.opacity = '1', 50);
+        return;
+      }
+
+      let t, dx = 0, dy = 0, scaleY = 0.98;
+      if (elapsed < rampUp) {
+        t = elapsed / rampUp;
+        dx = Math.sin(elapsed * 0.005) * t * 2;
+        dy = Math.cos(elapsed * 0.006) * t * 1.2;
+        scaleY = 0.96 + Math.random() * 0.05;
+      } else {
+        t = 1;
+        dx = (Math.random() - 0.5) * 6 * (1.2 - (elapsed - rampUp) / peak);
+        dy = (Math.random() - 0.5) * 4;
+        scaleY = 0.93 + Math.random() * 0.14;
+      }
+      updateStyle(t, dx, dy, scaleY);
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  setInterval(overheatEffect, 14000);
+  setTimeout(overheatEffect, 2500);
+  startBaseDrift();
+
+  const vhsEffect = document.createElement('div');
+  vhsEffect.className = 'vhs-container';
+  document.body.appendChild(vhsEffect);
+
+  setInterval(() => {
+    if (Math.random() > 0.96) {
+      const offset = Math.random() * 6 - 3;
+      vhsEffect.style.transform = `translateX(${offset}px)`;
+      vhsEffect.style.opacity = '0.25';
+      setTimeout(() => {
+        vhsEffect.style.transform = 'translateX(0)';
+        vhsEffect.style.opacity = '0.15';
+      }, 180);
+    }
+  }, 600);
+
+  setInterval(() => {
+    if (Math.random() > 0.93) {
+      const links = document.querySelectorAll('.link');
+      links.forEach(link => {
+        link.style.opacity = '0.6';
+        setTimeout(() => link.style.opacity = '1', 300);
+      });
+    }
+  }, 3000);
+
+  const linksContainer = document.querySelector('.links-container');
+  let currentX = 0;
+  let currentY = 0;
+  const maxRotation = 8;
+  const sensitivity = 0.25;
+
+  function getCenter() {
+    const rect = linksContainer.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
+    };
+  }
+  
+  const leftPupil = document.querySelector('.left-eye .pupil');
+  const rightPupil = document.querySelector('.right-eye .pupil');
+
+  function followCursor(e) {
+    const center = getCenter();
+    const dx = e.clientX - center.x;
+    const dy = e.clientY - center.y;
+
+    const normX = dx / (window.innerWidth * 0.5);
+    const normY = dy / (window.innerHeight * 0.5);
+
+    let targetX = -normY * maxRotation;
+    let targetY = normX * maxRotation;
+
+    targetX = Math.max(Math.min(targetX, maxRotation), -maxRotation);
+    targetY = Math.max(Math.min(targetY, maxRotation), -maxRotation);
+
+    currentX += (targetX - currentX) * sensitivity;
+    currentY += (targetY - currentY) * sensitivity;
+
+    linksContainer.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg) translateZ(0)`;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const intensity = Math.max(0, 1 - distance / 400);
+
+    linksContainer.style.boxShadow = `
+      0 0 ${10 + intensity * 20}px rgba(51, 255, 51, ${0.1 + intensity * 0.3}),
+      0 0 ${5 + intensity * 10}px rgba(51, 255, 51, ${0.05 + intensity * 0.2})
+    `;
+    linksContainer.style.borderColor = `rgba(51, 255, 51, ${0.4 + intensity * 0.4})`;
+  }
+
+  let isMouseNear = true;
+
+document.addEventListener('mousemove', (e) => {
+  const rect = linksContainer.getBoundingClientRect();
+  const dx = e.clientX - (rect.left + rect.width / 2);
+  const dy = e.clientY - (rect.top + rect.height / 2);
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  isMouseNear = distance < 1000;
+  followCursor(e);
+  
+  if (!leftPupil || !rightPupil) return;
+
+  const screenCenterX = window.innerWidth / 2;
+  const screenCenterY = window.innerHeight / 2;
+  const edx = e.clientX - screenCenterX;
+  const edy = e.clientY - screenCenterY;
+  const normX = edx / window.innerWidth;
+  const normY = edy / window.innerHeight;
+
+  const maxMove = 3.5;
+  const moveX = normX * maxMove * 2.5;
+  const moveY = normY * maxMove;
+  const finalMoveX = Math.max(Math.min(moveX, maxMove), -maxMove);
+  const finalMoveY = Math.max(Math.min(moveY, maxMove * 0.6), -maxMove * 0.6);
+
+  leftPupil.style.transform = `translate(${finalMoveX}px, ${finalMoveY}px)`;
+  rightPupil.style.transform = `translate(${finalMoveX}px, ${finalMoveY}px)`;
+});
+
+function blinkEyes() {
+  const leftEye = document.querySelector('.left-eye');
+  const rightEye = document.querySelector('.right-eye');
+  if (!leftEye || !rightEye) {
+    return;
+  }
+
+  leftEye.classList.add('blink');
+  rightEye.classList.add('blink');
+
+  setTimeout(() => {
+    leftEye.classList.remove('blink');
+    rightEye.classList.remove('blink');
+  }, 150);
+}
+setInterval(() => {
+  blinkEyes();
+}, Math.random() * 4000 + 3000);
+  </script>
+</body>
 </html>
