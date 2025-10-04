@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="icon" type="image/png" href="res/favicon.png">
   <title>Beerymaid</title>
   <style>
@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     min-height: 100vh;
 	width: 100vw;
     text-align: center;
@@ -52,14 +52,8 @@
   }
 
   .header {
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-    margin-top: 200px;
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: bold;
     letter-spacing: 3px;
     text-shadow: 0 0 10px #00ff00;
@@ -115,8 +109,10 @@
   }
 
   .links-container {
+    list-style: none;
+	padding: 50px 20px 20px 20px;
+    margin-top: 0;
     position: relative;
-    margin-top: 20px;
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -125,31 +121,53 @@
     z-index: 12;
     transform-style: preserve-3d;
     perspective: 1200px;
-    padding: 60px 25px 25px 25px;
     background: rgba(0, 0, 0, 1);
     border: 1px solid rgba(51, 255, 51, 0.4);
     box-shadow: 0 0 15px rgba(51, 255, 51, 0.15);
-    border-radius: 0;
-    width: 300px;
+    width: auto;
     transition: transform 0.1s ease-out, box-shadow 0.2s ease;
   }
-
+  
+  .links-list {
+	margin: 0;
+	padding: 0;
+    grid-template-columns: 1fr;
+  }
+  
+  @media (min-width: 600px) {
+	.header {
+		font-size: 4rem;
+	}
+    .links-list {
+	  display: grid;
+	  grid-template-columns: repeat(2, 2fr);
+	  gap: 20px;
+    }
+  }
+  
+  @media (orientation: landscape) and (min-width: 1000px) {
+	.header {
+		font-size: 4rem;
+	}
+    .links-list {
+	  display: grid;
+	  grid-template-columns: repeat(4, 1fr);
+	  gap: 20px;
+    }
+  }
+  
   .link {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
+    color: #33ff33;
     padding: 15px 30px;
     font-size: 1.5rem;
 	font-weight: bold;
 	letter-spacing: 3px;
-    color: #33ff33;
     text-decoration: none;
     border: 1px solid #33ff33;
-    width: 250px;
-    border-radius: 0;
+	min-heigth: 100px;
+    width: auto;
+	cursor: pointer;
     background: transparent;
     transition: all 0.3s;
     position: relative;
@@ -298,8 +316,6 @@
 
   <div class="vhs-container" id="vhs-effect"></div>
   <div class="scanline"></div>
-  <!div class="noise"></div>
-  <!div class="flicker"></div>
   
   <div class="tape-container">
     <div class="tape-strip"></div>
@@ -309,24 +325,24 @@
     <div class="tape-strip-negative"></div>
   </div>
 
-  <h1 class="header">
-  Beerymaid<span class="cursor">_</span>
- </h1>
+  <h1 class="header">Beerymaid<span class="cursor">_</span></h1>
 
   <div class="links-container">
-  <div class="eyes-overlay">
-    <div class="eye left-eye">
-      <div class="pupil"></div>
+    <div class="eyes-overlay">
+      <div class="eye left-eye">
+        <div class="pupil"></div>
+      </div>
+      <div class="eye right-eye">
+        <div class="pupil"></div>
+      </div>
     </div>
-    <div class="eye right-eye">
-      <div class="pupil"></div>
-    </div>
-  </div>
-  
-    <a href="?utm_source=picker" class="link">PICKER</a>
-    <a href="?utm_source=total" class="link">TOTAL</a>
-    <a href="?utm_source=discord" class="link">DISCORD</a>
-    <a href="?utm_source=github" class="link">GITHUB</a>
+	
+	<ul class="links-list">
+	  <li class="link" data-href="?utm_source=picker">PICKER</li>
+	  <li class="link" data-href="?utm_source=total">TOTAL</li>
+	  <li class="link" data-href="?utm_source=discord">DISCORD</li>
+	  <li class="link" data-href="?utm_source=github">GITHUB</li>
+	 </ul>
   </div>
 
   <script>
@@ -349,6 +365,15 @@
       window.location.href = 'https://mega.nz/folder/fXIFDYjI#UB-9dfV6099oSRWeSU9FRg';
     }
   })();
+  
+  document.querySelectorAll('.link').forEach(item => {
+    item.addEventListener('click', function() {
+      const url = this.getAttribute('data-href');
+      if (url) {
+        window.location.href = url;
+      }
+    });
+  });
   
   const header = document.querySelector('.header');
 
@@ -440,7 +465,7 @@
 
   setInterval(() => {
     if (Math.random() > 0.93) {
-      const links = document.querySelectorAll('.link');
+      const links = document.querySelectorAll('.link li');
       links.forEach(link => {
         link.style.opacity = '0.6';
         setTimeout(() => link.style.opacity = '1', 300);
