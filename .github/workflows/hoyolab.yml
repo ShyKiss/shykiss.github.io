@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: profile-data
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -30,5 +34,6 @@ jobs:
             echo "No changes"
           else
             git commit -m "Update ZZZ profile data"
+            git pull --rebase origin main
             git push
           fi
