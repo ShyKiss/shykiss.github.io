@@ -1,574 +1,967 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Beerymaid — Outlast modder, Linux and C++ / Rust developer.">
   <link rel="icon" type="image/png" href="res/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <title>Beerymaid</title>
   <style>
-  body {
-    margin: 0;
-    padding: 0;
-	background-color: #000;
-    background-image: url('res/bg.png');
-    color: #33ff33;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-	width: 100vw;
-    text-align: center;
-  }
-
-  .vhs-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 10;
-    mix-blend-mode: screen;
-    opacity: 0.15;
-  }
-
-  .scanline {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.45),
-      rgba(0, 0, 0, 0.45) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    pointer-events: none;
-    z-index: 11;
-  }
-
-  .header {
-    user-select: none;
-    font-size: 3rem;
-    font-weight: bold;
-    letter-spacing: 3px;
-    text-shadow: 0 0 10px #00ff00;
-    color: #33ff33;
-    position: relative;
-    z-index: 2;
-    transform: scaleY(0.98);
-    transform-origin: center;
-  }
-  
-  .header::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      transparent 0%,
-      rgba(0, 0, 0, 0.1) 50%,
-      transparent 100%
-    );
-    background-size: 100% 4px;
-    opacity: 0.3;
-    animation: scan-drift 2s linear infinite, line-jump 4s ease-in-out infinite;
-    mix-blend-mode: overlay;
-    z-index: 1;
-  }
-
-  @keyframes scan-drift {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 100%; }
-  }
-
-  @keyframes line-jump {
-    0%, 95%, 100% { transform: translateY(0); }
-    3% { transform: translateY(-6px); }
-    6% { transform: translateY(4px); }
-  }
-  
-  .cursor {
-    opacity: 1;
-    font-weight: normal;
-    animation: blink 1.2s step-start infinite;
-    color: #33ff33;
-    text-shadow: 0 0 5px #33ff33, 0 0 10px #33ff33;
-  }
-
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  .links-container {
-    list-style: none;
-	padding: 50px 20px 20px 20px;
-    margin-top: 0;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    z-index: 12;
-    transform-style: preserve-3d;
-    perspective: 1200px;
-    background: rgba(0, 0, 0, 1);
-    border: 1px solid rgba(51, 255, 51, 0.4);
-    box-shadow: 0 0 15px rgba(51, 255, 51, 0.15);
-    width: auto;
-    transition: transform 0.1s ease-out, box-shadow 0.2s ease;
-  }
-  
-  .links-list {
-	margin: 0;
-	padding: 0;
-    grid-template-columns: 1fr;
-  }
-  
-  @media (min-width: 600px) {
-	.header {
-		font-size: 4rem;
-	}
-    .links-list {
-	  display: grid;
-	  grid-template-columns: repeat(2, 2fr);
-	  gap: 20px;
+    :root {
+      --ink: #050407;
+      --mag: #ff2bd6;
+      --cyan: #37e6ff;
+      --white: #f3f0ff;
+      --muted: #9b8fb8;
     }
-  }
-  
-  @media (orientation: landscape) and (min-width: 1000px) {
-	.header {
-		font-size: 4rem;
-	}
-    .links-list {
-	  display: grid;
-	  grid-template-columns: repeat(4, 1fr);
-	  gap: 20px;
-    }
-  }
-  
-  .link {
-    user-select: none;
-    color: #33ff33;
-    padding: 15px 30px;
-    font-size: 1.5rem;
-	font-weight: bold;
-	letter-spacing: 3px;
-    text-decoration: none;
-    border: 1px solid #33ff33;
-	min-heigth: 100px;
-    width: auto;
-	cursor: pointer;
-    background: transparent;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
 
-  .link:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: 0.5s;
-  }
+    * { box-sizing: border-box; }
 
-  .link:hover {
-    background-color: rgba(51, 255, 51, 0.1);
-    text-shadow: 0 0 15px #33ff33;
-    box-shadow: 0 0 15px #33ff33;
-  }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background-color: var(--ink);
+      color: var(--white);
+      font-family: system-ui, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
 
-  .link:hover:before {
-    left: 100%;
-  }
+    #scene,
+    #fx,
+    #ov {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  .eyes-overlay {
-    position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 14px;
-    pointer-events: none;
-    z-index: 3;
-  }
-  
-  .eye {
-    width: 25px;
-    height: 17px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid #33ff33;
-    border-radius: 50%;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 6px rgba(51, 255, 51, 0.3);
-  }
-  
-  .pupil {
-    width: 12px;
-    height: 12px;
-    background: #ff3333;
-    border-radius: 50%;
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    transform: translate(0%, 0%);
-    transition: transform 0.05s cubic-bezier(0.3, 0, 0.2, 1);
-    box-shadow: 0 0 2px #ff0;
-  }
-  
-  .left-eye {
-    transform: rotate(5deg);
-  }
-  
-  .right-eye {
-    transform: rotate(-5deg);
-  }
-  
-  .eye.blink {
-    animation: blink-animation 0.15s ease-in-out;
-  }
-  
-  @keyframes blink-animation {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.1); }
-  }
-    
-  .tape-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 180px;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-  
-  .tape-strip {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('res/filmloop.png') repeat-x;
-    background-size: auto 100%;
-    animation: tape-scroll 10s linear infinite;
-    transform: translate3d(0, 0, 0);
-    will-change: background-position;
-  }
-  
-  @keyframes tape-scroll {
-    0% {
-      background-position: 0 0;
+    #fx { z-index: 1; }
+    #ov { z-index: 2; }
+
+    main {
+      position: relative;
+      z-index: 1;
+      height: 100%;
     }
-    100% {
-      background-position: 1888px 0;
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
-  }
-  
-  .tape-container-negative {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 180px;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-  
-  .tape-strip-negative {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('res/filmloop.png') repeat-x;
-	background-transparent: 20%;
-    background-size: auto 100%;
-    animation: tape-scroll-negative 10s linear infinite;
-    transform: translate3d(0, 0, 0);
-    will-change: background-position;
-  }
-  
-  @keyframes tape-scroll-negative {
-    0% {
-      background-position: 0 0;
+
+    .cards {
+      position: absolute;
+      left: 50%;
+      bottom: 6%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: min(640px, calc(100vw - 32px));
     }
-    100% {
-      background-position: -1888px 0;
+
+    .cards [hidden] {
+      display: none !important;
     }
-  }
-  
+
+    .steam-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: min(480px, 100%);
+      padding: 12px 14px;
+      background: rgba(10, 4, 18, 0.72);
+      border: 1px solid rgba(55, 230, 255, 0.55);
+      box-shadow: 0 0 22px rgba(55, 230, 255, 0.25);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .steam-card:hover,
+    .steam-card:focus-visible {
+      border-color: var(--mag);
+      box-shadow: 0 0 28px rgba(255, 43, 214, 0.4);
+    }
+
+    .steam-card img {
+      width: 96px;
+      height: 96px;
+      flex: none;
+      border: 1px solid rgba(255, 43, 214, 0.5);
+      visibility: hidden;
+    }
+
+    .steam-card img.loaded {
+      visibility: visible;
+    }
+
+    .steam-card .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-left: 6px;
+      border-radius: 50%;
+      background: #5d5470;
+      vertical-align: middle;
+    }
+
+    .steam-card .dot.online {
+      background: #7dff9a;
+      box-shadow: 0 0 8px #7dff9a;
+    }
+
+    .steam-card .label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .steam-card .name {
+      display: block;
+      margin-top: 2px;
+      font-family: "Orbitron", system-ui, sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      color: var(--mag);
+    }
+
+    .steam-card .meta {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .steam-card .recent {
+      display: block;
+      margin-top: 6px;
+    }
+
+    .steam-card .recent .game-head {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .hoyo-card {
+      width: 100%;
+      border-color: rgba(255, 179, 71, 0.55);
+      box-shadow: 0 0 22px rgba(255, 179, 71, 0.22);
+    }
+
+    .hoyo-card .info {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .hoyo-card .medals {
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(255, 179, 71, 0.3);
+    }
+
+    .hoyo-card .medal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      color: var(--white);
+    }
+
+    .hoyo-card .medal .count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 44px;
+      font-family: "Orbitron", system-ui, sans-serif;
+      font-weight: 700;
+      color: #ffd45c;
+    }
+
+    .hoyo-card .medal img {
+      width: 20px;
+      height: 20px;
+      flex: none;
+      border: 0;
+      visibility: visible;
+    }
+
+    @media (max-width: 700px) {
+      .hoyo-card {
+        flex-wrap: wrap;
+      }
+
+      .hoyo-card .medals {
+        flex-basis: 100%;
+        padding-left: 0;
+        padding-top: 8px;
+        border-left: 0;
+        border-top: 1px solid rgba(255, 179, 71, 0.3);
+      }
+    }
+
+    .hoyo-card .desc {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--white);
+      opacity: 0.85;
+    }
+
+    .steam-card .recent .game {
+      display: block;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--white);
+      opacity: 0.85;
+    }
   </style>
 </head>
 <body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <canvas id="ov" aria-hidden="true"></canvas>
 
-  <div class="vhs-container" id="vhs-effect"></div>
-  <div class="scanline"></div>
-  
-  <div class="tape-container">
-    <div class="tape-strip"></div>
-  </div>
-  
-  <div class="tape-container-negative">
-    <div class="tape-strip-negative"></div>
-  </div>
+  <main>
+    <h1 class="sr-only">Beerymaid</h1>
+    <ul class="sr-only">
+      <li><a href="https://github.com/ShyKiss/OpenOL">OpenOL — modified Outlast client</a></li>
+      <li><a href="https://github.com/ShyKiss/OpenOL-Relay">OpenOL-Relay — TUI/GUI relay for OpenOL clients</a></li>
+      <li><a href="https://github.com/ShyKiss/Picker">Picker — mod menu for Outlast</a></li>
+      <li><a href="https://github.com/ShyKiss/Growl">Growl — BNK manager and search for Outlast 1/2</a></li>
+    </ul>
 
-  <h1 class="header">Beerymaid<span class="cursor">_</span></h1>
-
-  <div class="links-container">
-    <div class="eyes-overlay">
-      <div class="eye left-eye">
-        <div class="pupil"></div>
-      </div>
-      <div class="eye right-eye">
-        <div class="pupil"></div>
-      </div>
+    <div class="cards">
+      <a class="steam-card" href="https://steamcommunity.com/id/beerymaid" target="_blank" rel="noopener">
+        <img id="steam-avatar" alt="" width="96" height="96">
+        <span>
+          <span class="label"><span id="steam-status">Steam</span><span class="dot" id="steam-dot"></span></span>
+          <span class="name" id="steam-name">Steam profile</span>
+          <span class="meta" id="steam-meta"></span>
+          <span class="recent" id="steam-recent"></span>
+        </span>
+      </a>
+      <a class="steam-card hoyo-card" id="hoyo-card" href="https://www.hoyolab.com/" target="_blank" rel="noopener" hidden>
+        <img id="hoyo-avatar" alt="" width="96" height="96">
+        <span class="info">
+          <span class="label" id="hoyo-game">Zenless Zone Zero</span>
+          <span class="name" id="hoyo-name"></span>
+          <span class="meta" id="hoyo-meta"></span>
+          <span class="desc" id="hoyo-desc"></span>
+        </span>
+        <span class="medals" id="hoyo-medals"></span>
+      </a>
     </div>
-	
-	<ul class="links-list">
-	  <li class="link" data-href="?utm_source=picker">PICKER</li>
-	  <li class="link" data-href="?utm_source=telegram">TELEGRAM</li>
-	  <li class="link" data-href="?utm_source=discord">DISCORD</li>
-	  <li class="link" data-href="?utm_source=github">GITHUB</li>
-	 </ul>
-  </div>
+  </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="res/biscuit.js"></script>
   <script>
-  (function() {
-    const queryString = window.location.search;
-    if (!queryString) return;
-    const urlParams = new URLSearchParams(queryString);
-    const utmSource = urlParams.get('utm_source');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const PHI = (1 + Math.sqrt(5)) / 2;
+    const TAU = Math.PI * 2;
+    const FISH = 0.3;
 
-    if (utmSource === 'discord') {
-      window.location.href = 'https://discord.com/users/327424787464847360';
-    }
-    else if (utmSource === 'github') {
-      window.location.href = 'https://github.com/ShyKiss';
-    }
-    else if (utmSource === 'telegram') {
-      window.location.href = 'https://t.me/beery4ka';
-    }
-    else if (utmSource === 'picker') {
-      window.location.href = 'https://mega.nz/folder/fXIFDYjI#UB-9dfV6099oSRWeSU9FRg';
-    }
-  })();
-  
-  document.querySelectorAll('.link').forEach(item => {
-    item.addEventListener('click', function() {
-      const url = this.getAttribute('data-href');
-      if (url) {
-        window.location.href = url;
+    const scene = document.getElementById('scene');
+    const g = scene.getContext('2d');
+    const fx = document.getElementById('fx');
+    const ov = document.getElementById('ov');
+    const ovg = ov.getContext('2d');
+
+    let W, H, DPR, dotPattern, gridPattern, noisePattern, cx, cy, titleSize;
+
+    const bisc = { base: new Image(), leftEye: new Image(), rightEye: new Image() };
+    for (const k of Object.keys(bisc)) bisc[k].src = (window.BISCUIT && window.BISCUIT[k]) || '';
+    const eyes = [{ img: bisc.leftEye }, { img: bisc.rightEye }];
+    let mouseX = null, mouseY = null;
+
+    const NODE_DEFS = [
+      { name: 'OpenOL', desc: 'Modified Outlast client', url: 'https://github.com/ShyKiss/OpenOL', color: '#ff2bd6' },
+      { name: 'OpenOL-Relay', desc: 'TUI/GUI relay for OpenOL clients', url: 'https://github.com/ShyKiss/OpenOL-Relay', color: '#37e6ff' },
+      { name: 'Picker', desc: 'Mod menu for Outlast', url: 'https://github.com/ShyKiss/Picker', color: '#b56bff' },
+      { name: 'Growl', desc: 'BNK manager & search for Outlast 1/2', url: 'https://github.com/ShyKiss/Growl', color: '#7dff9a' },
+      { name: 'Total', desc: 'Private repository', url: null, color: '#8a8594', private: true },
+      { name: 'Biscuit', desc: 'Private repository', url: null, color: '#7a7488', private: true },
+      { name: 'BoundPad', desc: 'Private repository', url: null, color: '#6f6a7a', private: true },
+      { name: '4Walls', desc: 'Private repository', url: null, color: '#9a96a6', private: true }
+    ];
+    const placed = [];
+    const nodes = NODE_DEFS.map((n, i) => {
+      let best = null;
+      let bestD = -1;
+      for (let k = 0; k < 40; k++) {
+        const ax = Math.random() < 0.5 ? 0.06 + Math.random() * 0.26 : 0.68 + Math.random() * 0.26;
+        const ay = 0.14 + Math.random() * 0.62;
+        const d = placed.length ? Math.min(...placed.map((p) => Math.hypot((p.ax - ax) * 1.6, p.ay - ay))) : 1;
+        if (d > bestD) {
+          bestD = d;
+          best = { ax, ay };
+        }
       }
+      placed.push(best);
+      const ax = best.ax;
+      const ay = best.ay;
+      return {
+        ...n,
+        ax,
+        ay,
+        ph: i * 1.7 + 0.4,
+        fx: 0.9 + i * 0.13,
+        fy: 1.1 + i * 0.11,
+        side: ax < 0.5 ? 1 : -1,
+        outward: ax < 0.5 ? -1 : 1,
+        r: 20,
+        x: 0, y: 0, hx: 0, hy: 0
+      };
     });
-  });
-  
-  const header = document.querySelector('.header');
+    let hoverIdx = -1;
 
-  function interpolateColor(t) {
-    const r = Math.round(51 + t * (255 - 51));
-    const g = Math.round(255 - t * 255);
-    return `rgb(${r}, ${g}, 33)`;
-  }
+    const VS = `#version 300 es
+    in vec2 p;
+    out vec2 vUv;
+    void main() {
+      vUv = vec2(p.x * 0.5 + 0.5, 0.5 - p.y * 0.5);
+      gl_Position = vec4(p, 0.0, 1.0);
+    }`;
 
-  function updateStyle(intensity, dx, dy, scaleY = 0.98) {
-    const color = interpolateColor(intensity);
-    const blur = 10 + intensity * 12;
-    header.style.color = color;
-    header.style.textShadow = `
-      ${dx}px ${dy}px ${blur * 0.6}px rgba(255, 255, 255, 0.3),
-      0 0 ${blur}px ${color}
-    `;
-    header.style.transform = `translate(${dx}px, ${dy}px) scaleY(${scaleY})`;
-  }
+    const FS = `#version 300 es
+    precision highp float;
+    in vec2 vUv;
+    out vec4 outColor;
+    uniform sampler2D uTex;
+    uniform vec2 uRes;
+    uniform float uFish;
+    uniform float uBloom;
+    uniform float uTime;
 
-  function startBaseDrift() {
-    setInterval(() => {
-      if (!header.isOverheating) {
-        const dx = (Math.random() - 0.5) * 0.7;
-        const dy = (Math.random() - 0.5) * 0.4;
-        const scaleY = 0.97 + Math.random() * 0.03;
-        updateStyle(0, dx, dy, scaleY);
-      }
-    }, 100);
-  }
-
-  function overheatEffect() {
-    header.isOverheating = true;
-    const rampUp = 1800;
-    const peak = 1000;
-    const crashTime = rampUp + peak;
-    const startTime = performance.now();
-
-    function animate(currentTime) {
-      const elapsed = currentTime - startTime;
-      if (elapsed >= crashTime) {
-        header.style.transform = 'translate(0) scaleY(0.98)';
-        header.style.color = '#33ff33';
-        header.style.textShadow = '0 0 10px #33ff33, 0 0 20px #00ff00';
-        header.isOverheating = false;
-        header.style.opacity = '0.7';
-        setTimeout(() => header.style.opacity = '1', 50);
-        return;
-      }
-
-      let t, dx = 0, dy = 0, scaleY = 0.98;
-      if (elapsed < rampUp) {
-        t = elapsed / rampUp;
-        dx = Math.sin(elapsed * 0.005) * t * 2;
-        dy = Math.cos(elapsed * 0.006) * t * 1.2;
-        scaleY = 0.96 + Math.random() * 0.05;
-      } else {
-        t = 1;
-        dx = (Math.random() - 0.5) * 6 * (1.2 - (elapsed - rampUp) / peak);
-        dy = (Math.random() - 0.5) * 4;
-        scaleY = 0.93 + Math.random() * 0.14;
-      }
-      updateStyle(t, dx, dy, scaleY);
-      requestAnimationFrame(animate);
+    float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
     }
 
-    requestAnimationFrame(animate);
-  }
+    void main() {
+      float aspect = uRes.x / uRes.y;
+      vec2 c = vUv - 0.5;
+      vec2 d = c * vec2(aspect, 1.0);
+      float r2 = dot(d, d);
+      float rLen = length(d);
+      float rMax = length(vec2(aspect, 1.0)) * 0.5;
+      float rr = rLen / rMax;
+      vec2 dir = rLen > 0.0 ? d / rLen : vec2(0.0);
+      float bulgeT = rr - uFish * rr * (1.0 - rr * rr);
+      vec2 bulged = dir * rMax * bulgeT;
+      vec2 uv = bulged / vec2(aspect, 1.0) + 0.5;
 
-  setInterval(overheatEffect, 14000);
-  setTimeout(overheatEffect, 2500);
-  startBaseDrift();
+      vec2 drift = vec2(sin(uTime * 0.21) + 0.5 * sin(uTime * 0.37 + 1.3),
+                        cos(uTime * 0.17) + 0.5 * cos(uTime * 0.29)) * 0.004;
+      uv = (uv - 0.5) * 0.98 + 0.5 + drift;
 
-  const vhsEffect = document.createElement('div');
-  vhsEffect.className = 'vhs-container';
-  document.body.appendChild(vhsEffect);
+      float lum0 = dot(textureLod(uTex, uv, 1.0).rgb, vec3(0.3, 0.59, 0.11));
+      float caW = 1.0 - smoothstep(0.25, 0.6, lum0);
+      vec2 ca = c * (0.012 + 0.05 * r2) * caW;
 
-  setInterval(() => {
-    if (Math.random() > 0.96) {
-      const offset = Math.random() * 6 - 3;
-      vhsEffect.style.transform = `translateX(${offset}px)`;
-      vhsEffect.style.opacity = '0.25';
-      setTimeout(() => {
-        vhsEffect.style.transform = 'translateX(0)';
-        vhsEffect.style.opacity = '0.15';
-      }, 180);
+      float blurR = 0.0006 + 0.012 * smoothstep(0.12, 0.5, sqrt(r2));
+      vec3 col = vec3(0.0);
+      for (int i = 0; i < 12; i++) {
+        float fi = float(i);
+        float a = fi * 2.39996;
+        float rrr = sqrt((fi + 0.5) / 12.0);
+        vec2 o = vec2(cos(a) / aspect, sin(a)) * rrr * blurR;
+        col.r += texture(uTex, uv + o + ca).r;
+        col.g += texture(uTex, uv + o).g;
+        col.b += texture(uTex, uv + o - ca).b;
+      }
+      col /= 12.0;
+
+      vec3 glow = textureLod(uTex, uv, 2.0).rgb * 0.4
+                + textureLod(uTex, uv, 3.0).rgb * 0.6
+                + textureLod(uTex, uv, 4.0).rgb * 0.8
+                + textureLod(uTex, uv, 5.0).rgb * 1.0;
+      col += glow / 2.8 * uBloom;
+      col *= clamp(1.0 - 0.6 * r2, 0.0, 1.0);
+      col += (hash(vUv * uRes + uTime) - 0.5) * 0.04;
+      col = 1.0 - exp(-col * 1.15);
+
+      outColor = vec4(col, 1.0);
+    }`;
+
+    let gl = null, glProg = null, glTex = null, glU = {};
+
+    function compile(gl, type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(s));
+        return null;
+      }
+      return s;
     }
-  }, 600);
 
-  setInterval(() => {
-    if (Math.random() > 0.93) {
-      const links = document.querySelectorAll('.link li');
-      links.forEach(link => {
-        link.style.opacity = '0.6';
-        setTimeout(() => link.style.opacity = '1', 300);
+    function initGL() {
+      const ctx = fx.getContext('webgl2', { antialias: false, alpha: false });
+      if (!ctx) return null;
+      const vs = compile(ctx, ctx.VERTEX_SHADER, VS);
+      const fs = compile(ctx, ctx.FRAGMENT_SHADER, FS);
+      if (!vs || !fs) return null;
+
+      const prog = ctx.createProgram();
+      ctx.attachShader(prog, vs);
+      ctx.attachShader(prog, fs);
+      ctx.linkProgram(prog);
+      if (!ctx.getProgramParameter(prog, ctx.LINK_STATUS)) {
+        console.error(ctx.getProgramInfoLog(prog));
+        return null;
+      }
+
+      const buf = ctx.createBuffer();
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, buf);
+      ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), ctx.STATIC_DRAW);
+      const loc = ctx.getAttribLocation(prog, 'p');
+      ctx.enableVertexAttribArray(loc);
+      ctx.vertexAttribPointer(loc, 2, ctx.FLOAT, false, 0, 0);
+
+      const tex = ctx.createTexture();
+      ctx.bindTexture(ctx.TEXTURE_2D, tex);
+      ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MIN_FILTER, ctx.LINEAR_MIPMAP_LINEAR);
+      ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MAG_FILTER, ctx.LINEAR);
+      ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_S, ctx.CLAMP_TO_EDGE);
+      ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_T, ctx.CLAMP_TO_EDGE);
+
+      ctx.useProgram(prog);
+      glU = {
+        tex: ctx.getUniformLocation(prog, 'uTex'),
+        res: ctx.getUniformLocation(prog, 'uRes'),
+        fish: ctx.getUniformLocation(prog, 'uFish'),
+        bloom: ctx.getUniformLocation(prog, 'uBloom'),
+        time: ctx.getUniformLocation(prog, 'uTime')
+      };
+      glProg = prog;
+      glTex = tex;
+      return ctx;
+    }
+
+    function drawGL(time) {
+      gl.viewport(0, 0, fx.width, fx.height);
+      gl.useProgram(glProg);
+      gl.bindTexture(gl.TEXTURE_2D, glTex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, scene);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.uniform1i(glU.tex, 0);
+      gl.uniform2f(glU.res, fx.width, fx.height);
+      gl.uniform1f(glU.fish, FISH);
+      gl.uniform1f(glU.bloom, 1.25);
+      gl.uniform1f(glU.time, time * 0.001);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+
+    const FX_SCALE = 0.75;
+    const measureCache = new Map();
+
+    function measure(text, font, spacing = '0px') {
+      const key = `${font}|${spacing}|${text}`;
+      let w = measureCache.get(key);
+      if (w === undefined) {
+        g.font = font;
+        g.letterSpacing = spacing;
+        w = g.measureText(text).width;
+        measureCache.set(key, w);
+      }
+      return w;
+    }
+
+    function resize() {
+      measureCache.clear();
+      DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      scene.width = Math.round(W * DPR);
+      scene.height = Math.round(H * DPR);
+      fx.width = Math.round(scene.width * FX_SCALE);
+      fx.height = Math.round(scene.height * FX_SCALE);
+      g.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ov.width = scene.width;
+      ov.height = scene.height;
+      ovg.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+      cx = W / 2;
+      cy = H * 0.52;
+      titleSize = Math.min(W * 0.11, 130);
+
+    }
+
+    function makePatterns() {
+      const p = document.createElement('canvas');
+      p.width = p.height = 22;
+      const pc = p.getContext('2d');
+      pc.fillStyle = 'rgba(255, 43, 214, 0.14)';
+      pc.beginPath();
+      pc.arc(11, 11, 1.1, 0, TAU);
+      pc.fill();
+      dotPattern = g.createPattern(p, 'repeat');
+
+      const t = document.createElement('canvas');
+      t.width = t.height = 6;
+      const tc = t.getContext('2d');
+      const tints = ['rgba(255, 0, 0, 0.12)', 'rgba(0, 255, 0, 0.08)', 'rgba(0, 0, 255, 0.14)'];
+      for (let x = 0; x < 6; x++) {
+        tc.fillStyle = tints[Math.floor(x / 2) % 3];
+        tc.fillRect(x, 0, 1, 6);
+      }
+      tc.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      tc.fillRect(5, 0, 1, 6);
+      tc.fillRect(0, 5, 6, 1);
+      gridPattern = g.createPattern(t, 'repeat');
+
+      const nz = document.createElement('canvas');
+      nz.width = nz.height = 160;
+      const nc = nz.getContext('2d');
+      const id = nc.createImageData(160, 160);
+      for (let i = 0; i < id.data.length; i += 4) {
+        const v = Math.random() < 0.5 ? 0 : 255;
+        id.data[i] = id.data[i + 1] = id.data[i + 2] = v;
+        id.data[i + 3] = Math.random() < 0.5 ? 0 : 16;
+      }
+      nc.putImageData(id, 0, 0);
+      noisePattern = g.createPattern(nz, 'repeat');
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    makePatterns();
+
+    function newParticle(initial) {
+      return {
+        x: Math.random() * W,
+        y: initial ? Math.random() * H : H + 10,
+        r: Math.random() * 2.2 + 0.4,
+        vy: -(Math.random() * 0.3 + 0.05),
+        a: Math.random() * 0.6 + 0.2,
+        ph: Math.random() * TAU
+      };
+    }
+    const particles = Array.from({ length: 80 }, () => newParticle(true));
+
+    function drawBackground(time) {
+      const ox = reduce ? 0 : Math.sin(time * 0.00007) * W * 0.1;
+      const oy = reduce ? 0 : Math.cos(time * 0.00005) * H * 0.1;
+      const grad = g.createRadialGradient(cx + ox, H * 0.3 + oy, 0, cx + ox, H * 0.3 + oy, Math.max(W, H) * 0.7);
+      grad.addColorStop(0, '#0d0a12');
+      grad.addColorStop(1, '#050407');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, W, H);
+
+      g.save();
+      g.translate(reduce ? 0 : Math.sin(time * 0.00012) * 32, reduce ? 0 : Math.cos(time * 0.0001) * 32);
+      g.fillStyle = dotPattern;
+      g.fillRect(-40, -40, W + 80, H + 80);
+      g.restore();
+
+      if (!reduce) {
+        g.save();
+        g.translate(Math.random() * 160, Math.random() * 160);
+        g.fillStyle = noisePattern;
+        g.fillRect(-160, -160, W + 320, H + 320);
+        g.restore();
+      }
+
+      for (const p of particles) {
+        if (!reduce) {
+          p.y += p.vy;
+          p.x += Math.sin(time * 0.0005 + p.ph) * 0.2;
+          if (p.y < -10) Object.assign(p, newParticle(false));
+        }
+        g.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(time * 0.002 + p.ph));
+        g.fillStyle = p.r > 1.6 ? '#37e6ff' : '#ff2bd6';
+        g.beginPath();
+        g.arc(p.x, p.y, p.r, 0, TAU);
+        g.fill();
+      }
+      g.globalAlpha = 1;
+    }
+
+    function quad(p0x, p0y, cxp, cyp, p1x, p1y, t) {
+      const u = 1 - t;
+      return [
+        u * u * p0x + 2 * u * t * cxp + t * t * p1x,
+        u * u * p0y + 2 * u * t * cyp + t * t * p1y
+      ];
+    }
+
+    function drawNodes(time) {
+      const g = ovg;
+      g.clearRect(0, 0, W, H);
+      const labelPx = W < 600 ? 13 : 16;
+      const descPx = W < 600 ? 11 : 13;
+
+      nodes.forEach((n, i) => {
+        n.x = n.ax * W + Math.sin(time * 0.00035 * n.fx + n.ph) * 22;
+        n.y = n.ay * H + Math.cos(time * 0.0003 * n.fy + n.ph) * 16;
+        n.hx = n.x;
+        n.hy = n.y;
+
+        const dx = cx - n.x;
+        const dy = cy - n.y;
+        const len = Math.hypot(dx, dy);
+        const sag = len * 0.12 * n.side;
+        const ctrlX = (n.x + cx) / 2 + (-dy / len) * sag;
+        const ctrlY = (n.y + cy) / 2 + (dx / len) * sag;
+
+        const N = 24;
+        const B = 8;
+        const per = N / B;
+        g.lineWidth = 1.3;
+        g.strokeStyle = n.color;
+        g.shadowColor = n.color;
+        for (let b = 0; b < B; b++) {
+          const tm = (b * per + per / 2) / N;
+          g.globalAlpha = 0.85 * Math.pow(1 - tm, 1.6) + 0.03;
+          g.shadowBlur = 1 + tm * tm * 18;
+          g.beginPath();
+          for (let s = b * per; s <= (b + 1) * per; s++) {
+            const [sx, sy] = quad(n.x, n.y, ctrlX, ctrlY, cx, cy, s / N);
+            if (s === b * per) g.moveTo(sx, sy);
+            else g.lineTo(sx, sy);
+          }
+          g.stroke();
+        }
+
+        const pt = (time * 0.00022 + n.ph / TAU) % 1;
+        const [px, py] = quad(n.x, n.y, ctrlX, ctrlY, cx, cy, pt);
+        g.globalAlpha = 0.9 * (1 - pt);
+        g.shadowBlur = 12;
+        g.fillStyle = n.color;
+        g.beginPath();
+        g.arc(px, py, 2.2, 0, TAU);
+        g.fill();
+
+        const hot = i === hoverIdx;
+        const nameW = measure(n.name, `700 ${labelPx}px Orbitron, system-ui, sans-serif`, '2px');
+        const descW = measure(n.desc, `500 ${descPx}px system-ui, sans-serif`);
+
+        const pad = 12;
+        const textX = pad + 14;
+        const bw = textX + Math.max(nameW, descW) + pad + (n.private ? 18 : 0);
+        const bh = 66;
+        const bx = n.x - bw / 2;
+        const by = n.y - bh / 2;
+        n.box = { x: bx, y: by, w: bw, h: bh };
+
+        g.globalAlpha = 1;
+        g.shadowBlur = 0;
+        g.fillStyle = 'rgba(6, 3, 11, 0.9)';
+        g.fillRect(bx, by, bw, bh);
+
+        g.shadowBlur = hot ? 26 : 12;
+        g.shadowColor = n.color;
+        g.strokeStyle = n.color;
+        g.lineWidth = hot ? 2 : 1.2;
+        g.strokeRect(bx, by, bw, bh);
+
+        if (n.private) {
+          const lx = bx + bw - pad - 4;
+          const ly = n.y - 4;
+          g.shadowBlur = 0;
+          g.strokeStyle = '#c9c4d6';
+          g.lineWidth = 2;
+          g.beginPath();
+          g.arc(lx, ly, 3.5, Math.PI, 0);
+          g.stroke();
+          g.fillStyle = '#c9c4d6';
+          g.fillRect(lx - 5, ly, 10, 8);
+          g.fillStyle = '#06030b';
+          g.fillRect(lx - 1, ly + 3, 2, 3);
+        }
+
+        g.shadowBlur = 10;
+        g.fillStyle = n.color;
+        g.beginPath();
+        g.arc(bx + pad + 3, n.y, 3.5, 0, TAU);
+        g.fill();
+
+        g.textAlign = 'left';
+        g.textBaseline = 'alphabetic';
+        g.shadowBlur = 8;
+        g.font = `700 ${labelPx}px Orbitron, system-ui, sans-serif`;
+        g.letterSpacing = '2px';
+        g.fillStyle = n.color;
+        g.fillText(n.name, bx + textX, n.y - 6);
+        g.letterSpacing = '0px';
+        g.font = `500 ${descPx}px system-ui, sans-serif`;
+        g.fillStyle = '#9b8fb8';
+        g.fillText(n.desc, bx + textX, n.y + 16);
       });
+
+      g.globalAlpha = 1;
+      g.shadowBlur = 0;
     }
-  }, 3000);
 
-  const linksContainer = document.querySelector('.links-container');
-  let currentX = 0;
-  let currentY = 0;
-  const maxRotation = 8;
-  const sensitivity = 0.25;
+    function eyeCenter(eye) {
+      if (eye.center !== undefined) return eye.center;
+      if (!eye.img.complete || !eye.img.naturalWidth) return null;
+      const N = 256;
+      const c = document.createElement('canvas');
+      c.width = c.height = N;
+      const cc = c.getContext('2d');
+      cc.drawImage(eye.img, 0, 0, N, N);
+      const d = cc.getImageData(0, 0, N, N).data;
+      let x0 = N, y0 = N, x1 = -1, y1 = -1;
+      for (let y = 0; y < N; y++) {
+        for (let x = 0; x < N; x++) {
+          if (d[(y * N + x) * 4 + 3] > 0) {
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+          }
+        }
+      }
+      eye.center = x1 < 0 ? false : [(x0 + x1 + 1) / 2 / N, (y0 + y1 + 1) / 2 / N];
+      return eye.center;
+    }
 
-  function getCenter() {
-    const rect = linksContainer.getBoundingClientRect();
-    return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2
-    };
-  }
-  
-  const leftPupil = document.querySelector('.left-eye .pupil');
-  const rightPupil = document.querySelector('.right-eye .pupil');
+    function drawBiscuit() {
+      if (!bisc.base.complete || !bisc.base.naturalWidth) return;
+      const tf = `700 ${titleSize}px Orbitron, system-ui, sans-serif`;
+      const left = cx - measure('BEERYMAID', tf) / 2;
+      const rx0 = left + measure('BEE', tf);
+      const rx1 = left + measure('BEERY', tf);
+      const s = rx1 - rx0;
+      const iconCY = cy - titleSize * 0.5 - s * 0.5 - H * 0.02;
+      const x0 = cx - s / 2;
+      const y0 = iconCY - s / 2;
+      g.drawImage(bisc.base, x0, y0, s, s);
 
-  function followCursor(e) {
-    const center = getCenter();
-    const dx = e.clientX - center.x;
-    const dy = e.clientY - center.y;
+      const maxOff = s * 0.035;
+      for (const eye of eyes) {
+        const c = eyeCenter(eye);
+        if (!c) continue;
+        let tx = 0, ty = 0;
+        if (mouseX !== null) {
+          const ex = x0 + c[0] * s;
+          const ey = y0 + c[1] * s;
+          const dx = mouseX - ex;
+          const dy = mouseY - ey;
+          const dist = Math.hypot(dx, dy);
+          if (dist > 0) {
+            const mag = maxOff * Math.min(1, dist / (s * 1.5));
+            tx = (dx / dist) * mag;
+            ty = (dy / dist) * mag;
+          }
+        }
+        eye.ox = (eye.ox || 0) + (tx - (eye.ox || 0)) * 0.15;
+        eye.oy = (eye.oy || 0) + (ty - (eye.oy || 0)) * 0.15;
+        g.drawImage(eye.img, x0 + eye.ox, y0 + eye.oy, s, s);
+      }
+    }
 
-    const normX = dx / (window.innerWidth * 0.5);
-    const normY = dy / (window.innerHeight * 0.5);
+    let nextGlitch = 2000, glitchEnd = 0;
+    let nextMirror = 3000, mirrorEnd = 0, mirrorSet = [];
 
-    let targetX = -normY * maxRotation;
-    let targetY = normX * maxRotation;
+    function drawTitle(time) {
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      const titleFont = `700 ${titleSize}px Orbitron, system-ui, sans-serif`;
+      g.font = titleFont;
+      g.letterSpacing = '0px';
 
-    targetX = Math.max(Math.min(targetX, maxRotation), -maxRotation);
-    targetY = Math.max(Math.min(targetY, maxRotation), -maxRotation);
+      g.shadowBlur = 36;
+      g.shadowColor = '#ff2bd6';
+      g.fillStyle = '#ff2bd6';
+      const word = 'BEERYMAID';
+      if (!reduce && time > nextMirror) {
+        const count = 1 + Math.floor(Math.random() * 4);
+        mirrorSet = [...new Set(Array.from({ length: count }, () => Math.floor(Math.random() * word.length)))];
+        mirrorEnd = time + 80 + Math.random() * 300;
+        nextMirror = mirrorEnd + 300 + Math.random() ** 2 * 9000;
+      }
+      if (time < mirrorEnd) {
+        const left = cx - measure(word, titleFont) / 2;
+        for (let i = 0; i < word.length; i++) {
+          const ch = word[i];
+          const xc = left + measure(word.slice(0, i), titleFont) + measure(ch, titleFont) / 2;
+          g.save();
+          g.translate(xc, cy);
+          if (mirrorSet.includes(i)) g.scale(-1, 1);
+          g.fillText(ch, 0, 0);
+          g.restore();
+        }
+      } else {
+        g.fillText(word, cx, cy);
+      }
 
-    currentX += (targetX - currentX) * sensitivity;
-    currentY += (targetY - currentY) * sensitivity;
+      if (time > nextGlitch) {
+        glitchEnd = time + 180;
+        nextGlitch = time + 3000 + Math.random() * 4000;
+      }
+      if (time < glitchEnd) {
+        const by = cy - titleSize * 0.5 + Math.random() * titleSize;
+        g.save();
+        g.beginPath();
+        g.rect(0, by, W, titleSize * 0.18);
+        g.clip();
+        g.shadowColor = '#37e6ff';
+        g.fillStyle = '#37e6ff';
+        g.fillText('BEERYMAID', cx + 12, cy);
+        g.restore();
+      }
 
-    linksContainer.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg) translateZ(0)`;
+      const tw = measure('BEERYMAID', titleFont);
+      const ly = cy + titleSize * 0.5 + 16;
+      const x0 = cx - tw / 2 - 60;
+      const x1 = cx + tw / 2 + 60;
+      const grad = g.createLinearGradient(x0, 0, x1, 0);
+      grad.addColorStop(0, 'rgba(255, 43, 214, 0)');
+      grad.addColorStop(0.5, '#37e6ff');
+      grad.addColorStop(1, 'rgba(255, 43, 214, 0)');
+      g.strokeStyle = grad;
+      g.lineWidth = 1.4;
+      g.shadowBlur = 14;
+      g.shadowColor = '#37e6ff';
+      g.beginPath();
+      g.moveTo(x0, ly);
+      g.lineTo(x1, ly);
+      g.stroke();
+      g.shadowBlur = 0;
+    }
 
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const intensity = Math.max(0, 1 - distance / 400);
+    function frame(time) {
+      try {
+        drawBackground(time);
+        drawBiscuit();
+        drawTitle(time);
+        g.fillStyle = gridPattern;
+        g.fillRect(0, 0, W, H);
+        drawNodes(time);
+        if (gl) {
+          try {
+            drawGL(time);
+          } catch (err) {
+            console.warn('WebGL disabled:', err);
+            gl = null;
+            fx.hidden = true;
+            scene.style.display = '';
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        requestAnimationFrame(frame);
+      }
+    }
 
-    linksContainer.style.boxShadow = `
-      0 0 ${10 + intensity * 20}px rgba(51, 255, 51, ${0.1 + intensity * 0.3}),
-      0 0 ${5 + intensity * 10}px rgba(51, 255, 51, ${0.05 + intensity * 0.2})
-    `;
-    linksContainer.style.borderColor = `rgba(51, 255, 51, ${0.4 + intensity * 0.4})`;
-  }
+    function nodeAt(x, y) {
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const b = n.box;
+        if (b && x > b.x - 6 && x < b.x + b.w + 6 && y > b.y - 6 && y < b.y + b.h + 6) return i;
+      }
+      return -1;
+    }
 
-  let isMouseNear = true;
+    window.addEventListener('pointerout', (e) => {
+      if (!e.relatedTarget) mouseX = mouseY = null;
+    });
 
-document.addEventListener('mousemove', (e) => {
-  const rect = linksContainer.getBoundingClientRect();
-  const dx = e.clientX - (rect.left + rect.width / 2);
-  const dy = e.clientY - (rect.top + rect.height / 2);
-  const distance = Math.sqrt(dx * dx + dy * dy);
-  isMouseNear = distance < 1000;
-  followCursor(e);
-  
-  if (!leftPupil || !rightPupil) return;
+    window.addEventListener('pointermove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      hoverIdx = nodeAt(e.clientX, e.clientY);
+      document.body.style.cursor = hoverIdx >= 0 && nodes[hoverIdx].url ? 'pointer' : '';
+    });
 
-  const screenCenterX = window.innerWidth / 2;
-  const screenCenterY = window.innerHeight / 2;
-  const edx = e.clientX - screenCenterX;
-  const edy = e.clientY - screenCenterY;
-  const normX = edx / window.innerWidth;
-  const normY = edy / window.innerHeight;
+    window.addEventListener('pointerdown', (e) => {
+      const i = nodeAt(e.clientX, e.clientY);
+      if (i >= 0 && nodes[i].url) window.open(nodes[i].url, '_blank', 'noopener');
+    });
 
-  const maxMove = 3.5;
-  const moveX = normX * maxMove * 2.5;
-  const moveY = normY * maxMove;
-  const finalMoveX = Math.max(Math.min(moveX, maxMove), -maxMove);
-  const finalMoveY = Math.max(Math.min(moveY, maxMove * 0.6), -maxMove * 0.6);
+    function loadData(src, key) {
+      const d = $.Deferred();
+      const s = $('<script>', { src })
+        .on('load', () => (window[key] ? d.resolve(window[key]) : d.reject(new Error(`${key} missing`))))
+        .on('error', () => d.reject(new Error(`${src} did not load`)))
+        .get(0);
+      document.head.appendChild(s);
+      return d.promise();
+    }
 
-  leftPupil.style.transform = `translate(${finalMoveX}px, ${finalMoveY}px)`;
-  rightPupil.style.transform = `translate(${finalMoveX}px, ${finalMoveY}px)`;
-});
+    function renderSteam(d) {
+      $('#steam-avatar').attr('src', d.avatar).addClass('loaded');
+      $('#steam-dot').toggleClass('online', d.onlineState !== 'offline');
+      $('#steam-status').text(`Steam · ${d.statusMessage || 'Online'}`);
+      $('#steam-name').text(d.name);
+      $('#steam-meta').text(`Level ${d.level} · ${d.games} games`);
+      if (d.mostPlayed && d.mostPlayed.length) {
+        const recent = $('#steam-recent').empty();
+        $('<span>', { class: 'game-head', text: 'Last 2 weeks' }).appendTo(recent);
+        for (const x of d.mostPlayed) {
+          $('<span>', { class: 'game', text: `${x.name} · ${x.hoursLast2Weeks} h` }).appendTo(recent);
+        }
+      }
+    }
 
-function blinkEyes() {
-  const leftEye = document.querySelector('.left-eye');
-  const rightEye = document.querySelector('.right-eye');
-  if (!leftEye || !rightEye) {
-    return;
-  }
+    function renderHoyo(d) {
+      $('#hoyo-card').attr('href', d.profileUrl).prop('hidden', false);
+      if (d.avatar) $('#hoyo-avatar').attr('src', d.avatar).addClass('loaded');
+      else $('#hoyo-avatar').remove();
+      $('#hoyo-name').text(d.nickname);
+      $('#hoyo-meta').text([d.region, `Level ${d.level}`, `UID ${d.uid}`].filter(Boolean).join(' · '));
+      $('#hoyo-desc').text(d.description || '').prop('hidden', !d.description);
+      const medals = $('#hoyo-medals').empty();
+      for (const m of d.medals || []) {
+        const count = $('<span>', { class: 'count' });
+        if (m.prefixIcon) $('<img>', { src: m.prefixIcon, alt: '' }).appendTo(count);
+        count.append(document.createTextNode(String(m.count)));
+        const row = $('<span>', { class: 'medal' }).append(count);
+        if (m.icon) $('<img>', { src: m.icon, alt: '' }).appendTo(row);
+        row.append(document.createTextNode(m.name));
+        row.appendTo(medals);
+      }
+      medals.prop('hidden', !medals.children().length);
+    }
 
-  leftEye.classList.add('blink');
-  rightEye.classList.add('blink');
+    loadData('res/steam.js', 'STEAM_DATA')
+      .done(renderSteam)
+      .fail((err) => {
+        $('#steam-status').text('Steam unavailable');
+        console.warn('Steam data not loaded:', err);
+      });
 
-  setTimeout(() => {
-    leftEye.classList.remove('blink');
-    rightEye.classList.remove('blink');
-  }, 150);
-}
-setInterval(() => {
-  blinkEyes();
-}, Math.random() * 4000 + 3000);
+    loadData('res/hoyolab.js', 'HOYOLAB_DATA')
+      .done(renderHoyo)
+      .fail((err) => console.warn('HoYoLAB data not loaded:', err));
+
+    gl = initGL();
+    if (gl) scene.style.display = 'none';
+    else fx.hidden = true;
+
+    if (document.fonts) {
+      document.fonts.load('700 40px Orbitron');
+      document.fonts.addEventListener('loadingdone', () => measureCache.clear());
+    }
+    requestAnimationFrame(frame);
   </script>
 </body>
-
 </html>
-
