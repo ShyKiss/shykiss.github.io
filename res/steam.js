@@ -1,5 +1,5 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-10-19T11:36:01.624Z",
+  "updatedAt": "2026-10-19T17:58:16.692Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.akamai.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
@@ -16,12 +16,12 @@ window.STEAM_DATA = {
     },
     {
       "name": "Blender",
-      "hoursLast2Weeks": 19.7,
+      "hoursLast2Weeks": 15.3,
       "hoursTotal": 505
     },
     {
       "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 4.4,
+      "hoursLast2Weeks": 4.1,
       "hoursTotal": 136
     }
   ]
