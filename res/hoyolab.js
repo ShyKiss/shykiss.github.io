@@ -1,5 +1,5 @@
 window.HOYOLAB_DATA = {
-  "updatedAt": "2026-10-19T18:47:16.192Z",
+  "updatedAt": "2026-10-20T05:05:16.247Z",
   "profileUrl": "https://enka.network/zzz/1504611737",
   "game": "Zenless Zone Zero",
   "nickname": "CnepmarJloT_RU",
