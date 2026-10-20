@@ -1,18 +1,18 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-10-20T10:40:05.975Z",
+  "updatedAt": "2026-10-20T21:00:31.870Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "online",
-  "statusMessage": "Online",
-  "level": null,
-  "games": null,
+  "onlineState": "offline",
+  "statusMessage": "Offline",
+  "level": "24",
+  "games": "141",
   "hoursLast2Weeks": 0,
   "mostPlayed": [
     {
       "name": "The Witcher 3: Wild Hunt — Remastered",
-      "hoursLast2Weeks": 31.1,
-      "hoursTotal": 188
+      "hoursLast2Weeks": 33,
+      "hoursTotal": 190
     },
     {
       "name": "Blender",
