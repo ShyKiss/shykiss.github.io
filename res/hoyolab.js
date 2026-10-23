@@ -1,5 +1,5 @@
 window.HOYOLAB_DATA = {
-  "updatedAt": "2026-10-23T05:08:57.836Z",
+  "updatedAt": "2026-10-23T11:54:01.398Z",
   "profileUrl": "https://enka.network/zzz/1504611737",
   "game": "Zenless Zone Zero",
   "nickname": "CnepmarJloT_RU",
@@ -16,7 +16,7 @@ window.HOYOLAB_DATA = {
       "prefixIcon": "https://enka.network/ui/zzz/Crown.png"
     },
     {
-      "count": 26,
+      "count": 27,
       "name": "Опасный штурм: Распад",
       "icon": "https://enka.network/ui/zzz/Assault02.png",
       "prefixIcon": "https://enka.network/ui/zzz/Crown.png"
