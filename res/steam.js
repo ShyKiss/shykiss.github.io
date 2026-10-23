@@ -1,10 +1,10 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-10-23T02:34:55.682Z",
+  "updatedAt": "2026-10-23T10:43:26.033Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "offline",
-  "statusMessage": "Offline",
+  "onlineState": "in-game",
+  "statusMessage": "In-Game<br/>Zenless Zone Zero",
   "level": "24",
   "games": "141",
   "hoursLast2Weeks": 0,
@@ -15,14 +15,14 @@ window.STEAM_DATA = {
       "hoursTotal": 190
     },
     {
+      "name": "Zenless Zone Zero",
+      "hoursLast2Weeks": 5.5,
+      "hoursTotal": 138
+    },
+    {
       "name": "The Outlast Trials",
       "hoursLast2Weeks": 5,
       "hoursTotal": 1602
-    },
-    {
-      "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 5,
-      "hoursTotal": 137
     }
   ]
 };
