@@ -1,12 +1,12 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-10-24T02:33:36.305Z",
+  "updatedAt": "2026-10-24T09:59:30.165Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "offline",
-  "statusMessage": "Offline",
-  "level": null,
-  "games": null,
+  "onlineState": "in-game",
+  "statusMessage": "In-Game<br/>The Witcher 3: Wild Hunt — Remastered",
+  "level": "24",
+  "games": "141",
   "hoursLast2Weeks": 0,
   "mostPlayed": [
     {
@@ -16,7 +16,7 @@ window.STEAM_DATA = {
     },
     {
       "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 6.7,
+      "hoursLast2Weeks": 6.8,
       "hoursTotal": 139
     },
     {
