@@ -1,18 +1,18 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-10-28T17:39:38.222Z",
+  "updatedAt": "2026-10-28T22:00:26.794Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
-  "avatar": "https://avatars.akamai.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "online",
-  "statusMessage": "Online",
+  "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
+  "onlineState": "in-game",
+  "statusMessage": "In-Game<br/>The Witcher 3: Wild Hunt — Remastered",
   "level": "24",
   "games": "144",
   "hoursLast2Weeks": 0,
   "mostPlayed": [
     {
       "name": "The Witcher 3: Wild Hunt — Remastered",
-      "hoursLast2Weeks": 36.4,
-      "hoursTotal": 195
+      "hoursLast2Weeks": 36.3,
+      "hoursTotal": 199
     },
     {
       "name": "The Outlast Trials",
