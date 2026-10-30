@@ -1,5 +1,5 @@
 window.HOYOLAB_DATA = {
-  "updatedAt": "2026-10-30T13:16:49.668Z",
+  "updatedAt": "2026-10-30T22:33:18.290Z",
   "profileUrl": "https://enka.network/zzz/1504611737",
   "game": "Zenless Zone Zero",
   "nickname": "CnepmarJloT_RU",
@@ -10,7 +10,7 @@ window.HOYOLAB_DATA = {
   "avatar": "https://enka.network/ui/zzz/IconInterKnotRole0041.png",
   "medals": [
     {
-      "count": 28,
+      "count": 29,
       "name": "Оборона шиюй: Без устали",
       "icon": "https://enka.network/ui/zzz/Shiyu03.png",
       "prefixIcon": "https://enka.network/ui/zzz/Crown.png"
