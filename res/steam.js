@@ -1,5 +1,5 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-05T13:43:23.408Z",
+  "updatedAt": "2026-11-06T22:32:22.387Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.akamai.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
@@ -11,8 +11,8 @@ window.STEAM_DATA = {
   "mostPlayed": [
     {
       "name": "The Witcher 3: Wild Hunt — Remastered",
-      "hoursLast2Weeks": 17.4,
-      "hoursTotal": 207
+      "hoursLast2Weeks": 21.8,
+      "hoursTotal": 212
     },
     {
       "name": "PEAK",
@@ -21,7 +21,7 @@ window.STEAM_DATA = {
     },
     {
       "name": "The Outlast Trials",
-      "hoursLast2Weeks": 9.8,
+      "hoursLast2Weeks": 6.3,
       "hoursTotal": 1610
     }
   ]
