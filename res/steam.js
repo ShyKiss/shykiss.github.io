@@ -1,5 +1,5 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-09T03:43:12.217Z",
+  "updatedAt": "2026-11-09T14:43:33.577Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
@@ -21,7 +21,7 @@ window.STEAM_DATA = {
     },
     {
       "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 4.4,
+      "hoursLast2Weeks": 4.5,
       "hoursTotal": 144
     }
   ]
