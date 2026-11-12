@@ -1,10 +1,10 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-11T23:51:57.033Z",
+  "updatedAt": "2026-11-12T04:56:25.457Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "offline",
-  "statusMessage": "Offline",
+  "onlineState": "online",
+  "statusMessage": "Online",
   "level": "25",
   "games": "145",
   "hoursLast2Weeks": 0,
