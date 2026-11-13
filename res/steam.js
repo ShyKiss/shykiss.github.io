@@ -1,18 +1,18 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-13T13:38:59.300Z",
+  "updatedAt": "2026-11-13T23:01:42.827Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
-  "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "online",
-  "statusMessage": "Online",
+  "avatar": "https://avatars.akamai.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
+  "onlineState": "offline",
+  "statusMessage": "Offline",
   "level": "25",
   "games": "145",
   "hoursLast2Weeks": 0,
   "mostPlayed": [
     {
       "name": "The Witcher 3: Wild Hunt — Remastered",
-      "hoursLast2Weeks": 29.1,
-      "hoursTotal": 228
+      "hoursLast2Weeks": 32.3,
+      "hoursTotal": 232
     },
     {
       "name": "PEAK",
@@ -21,7 +21,7 @@ window.STEAM_DATA = {
     },
     {
       "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 4.5,
+      "hoursLast2Weeks": 3.7,
       "hoursTotal": 144
     }
   ]
