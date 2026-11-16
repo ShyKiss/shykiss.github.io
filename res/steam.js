@@ -1,10 +1,10 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-16T03:52:06.083Z",
+  "updatedAt": "2026-11-16T14:18:55.175Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
-  "onlineState": "online",
-  "statusMessage": "Online",
+  "onlineState": "in-game",
+  "statusMessage": "In-Game<br/>Zenless Zone Zero",
   "level": "25",
   "games": "145",
   "hoursLast2Weeks": 0,
@@ -16,7 +16,7 @@ window.STEAM_DATA = {
     },
     {
       "name": "Zenless Zone Zero",
-      "hoursLast2Weeks": 6.7,
+      "hoursLast2Weeks": 6.3,
       "hoursTotal": 148
     },
     {
