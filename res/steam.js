@@ -1,5 +1,5 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-21T13:54:20.852Z",
+  "updatedAt": "2026-11-21T22:35:56.791Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
@@ -11,8 +11,8 @@ window.STEAM_DATA = {
   "mostPlayed": [
     {
       "name": "The Witcher 3: Wild Hunt — Remastered",
-      "hoursLast2Weeks": 40.2,
-      "hoursTotal": 255
+      "hoursLast2Weeks": 44.3,
+      "hoursTotal": 259
     },
     {
       "name": "Zenless Zone Zero",
