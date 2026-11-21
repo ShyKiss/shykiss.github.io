@@ -1,5 +1,5 @@
 window.STEAM_DATA = {
-  "updatedAt": "2026-11-20T23:29:22.848Z",
+  "updatedAt": "2026-11-21T04:49:55.414Z",
   "name": "katamarantina",
   "profileUrl": "https://steamcommunity.com/id/beerymaid",
   "avatar": "https://avatars.fastly.steamstatic.com/fbc615c6d2a0383400729876323022f57cae5110_full.jpg",
